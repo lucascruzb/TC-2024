@@ -1,0 +1,89 @@
+{
+    "states": ["q0", "q1", "q_accept", "q_reject"],
+    "stack_symbols": ["Z", "A", "B"],
+    "initial_state": "q0",
+    "final_states": ["q_accept"],
+    "transitions": {
+        "q0": {
+            "A": {
+                "next_state": "q1",
+                "stack1": "push a",
+                "stack2": "noop"
+            },
+            "a": {
+                "next_state": "q1",
+                "stack1": "push A",
+                "stack2": "noop"
+            },
+            "B": {
+                "next_state": "q_reject",
+                "stack1": "noop",
+                "stack2": "noop"
+            },
+            "b": {
+                "next_state": "q_reject",
+                "stack1": "noop",
+                "stack2": "noop"
+            },
+            "<vazio>": {
+                "next_state": "q_reject",
+                "stack1": "noop",
+                "stack2": "noop"
+            }
+        },
+        "q1": {
+            "A": {
+                "next_state": "q1",
+                "stack1": "push A",
+                "stack2": "noop"
+            },
+            "a": {
+                "next_state": "q1",
+                "stack1": "push a",
+                "stack2": "noop"
+            },
+            "B": {
+                "next_state": "q1",
+                "stack1": "noop",
+                "stack2": "push b"
+            },
+            "b": {
+                "next_state": "q1",
+                "stack1": "noop",
+                "stack2": "push B"
+            },
+            "<vazio>": {
+                "next_state": "q_accept",
+                "stack1": "noop",
+                "stack2": "noop"
+            }
+        },
+        "q_reject":{
+            "A": {
+                "next_state": "q_reject",
+                "stack1": "noop",
+                "stack2": "noop"
+            },
+            "a": {
+                "next_state": "q_reject",
+                "stack1": "noop",
+                "stack2": "noop"
+            },
+            "B": {
+                "next_state": "q_reject",
+                "stack1": "noop",
+                "stack2": "noop"
+            },
+            "b": {
+                "next_state": "q_reject",
+                "stack1": "noop",
+                "stack2": "noop"
+            },
+            "<vazio>": {
+                "next_state": "q_reject",
+                "stack1": "noop",
+                "stack2": "noop"
+            }
+        }
+    }
+}
