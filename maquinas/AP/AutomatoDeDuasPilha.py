@@ -1,5 +1,4 @@
 import json
-from pathlib import Path, PurePath
 from maquinas.machine import Machine
 import copy
 
@@ -67,7 +66,7 @@ class AutomatoDeDuasPilha(Machine) :
             break
 
     def start(self, Json, Entrada):
-        data = Json
+        data = json.loads(Json)
         try:
             states = data['states']
             stack_symbols = data['stack_symbols']

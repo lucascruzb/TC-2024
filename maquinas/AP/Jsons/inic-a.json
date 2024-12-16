@@ -7,12 +7,12 @@
         "q0": {
             "A": {
                 "next_state": "q1",
-                "stack1": "push a",
+                "stack1": "push A",
                 "stack2": "noop"
             },
             "a": {
                 "next_state": "q1",
-                "stack1": "push A",
+                "stack1": "push a",
                 "stack2": "noop"
             },
             "B": {
@@ -45,12 +45,12 @@
             "B": {
                 "next_state": "q1",
                 "stack1": "noop",
-                "stack2": "push b"
+                "stack2": "push B"
             },
             "b": {
                 "next_state": "q1",
                 "stack1": "noop",
-                "stack2": "push B"
+                "stack2": "push b"
             },
             "<vazio>": {
                 "next_state": "q_accept",

@@ -1,17 +1,9 @@
 {
-  "machineType": "RegisterMachine",
-  "description": "Exemplo de uma máquina de registradores que soma dois valores, no exemplo 3 + 2.",
-  "registers": {
-    "A": 3, 
-    "B": 2, 
-    "C": 0
-  },
   "states": [
     "-B,2,4",
     "+A,3",
     "+C,1",
     "-C,5,#",
     "+B,4"
-  ],
-  "Comentario": "Explicação: no registers está todos os registradores que serão usados com os respquitivos valores iniciais; Em states estão todos os estados com suas transições por exemplo: -B,2,4 significa que o estado -B pode ir para a transsição 2 caso consiga decrementar 1, caso não consiga vai para a transições 4, sendo que cada transição esta em uma linha."
+  ]
 }

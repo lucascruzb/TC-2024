@@ -1,5 +1,5 @@
 {
     "machineType": "RegisterMachine",
-    "Estado Inicial Registradores": "A=3 | B=2 | C=0",
-    "Transicoes": "Trasicao: -B -> +A  Registradores: A=3 | B=1 | C=0\nTrasicao: +A -> +C  Registradores: A=4 | B=1 | C=0\nTrasicao: +C -> -B  Registradores: A=4 | B=1 | C=1\nTrasicao: -B -> +A  Registradores: A=4 | B=0 | C=1\nTrasicao: +A -> +C  Registradores: A=5 | B=0 | C=1\nTrasicao: +C -> -B  Registradores: A=5 | B=0 | C=2\nTrasicao: -B -> -C  Registradores: A=5 | B=0 | C=2\nTrasicao: -C -> +B  Registradores: A=5 | B=0 | C=1\nTrasicao: +B -> -C  Registradores: A=5 | B=1 | C=1\nTrasicao: -C -> +B  Registradores: A=5 | B=1 | C=0\nTrasicao: +B -> -C  Registradores: A=5 | B=2 | C=0\nTrasicao: -C -> #   Registradores: A=5 | B=2 | C=0\n"
+    "Estado Inicial Registradores": "A=10 | B=2 | C=0",
+    "Transicoes": "Trasicao: -B -> +A  Registradores: A=10 | B=1 | C=0\nTrasicao: +A -> +C  Registradores: A=11 | B=1 | C=0\nTrasicao: +C -> -B  Registradores: A=11 | B=1 | C=1\nTrasicao: -B -> +A  Registradores: A=11 | B=0 | C=1\nTrasicao: +A -> +C  Registradores: A=12 | B=0 | C=1\nTrasicao: +C -> -B  Registradores: A=12 | B=0 | C=2\nTrasicao: -B -> -C  Registradores: A=12 | B=0 | C=2\nTrasicao: -C -> +B  Registradores: A=12 | B=0 | C=1\nTrasicao: +B -> -C  Registradores: A=12 | B=1 | C=1\nTrasicao: -C -> +B  Registradores: A=12 | B=1 | C=0\nTrasicao: +B -> -C  Registradores: A=12 | B=2 | C=0\nTrasicao: -C -> #   Registradores: A=12 | B=2 | C=0\n"
 }

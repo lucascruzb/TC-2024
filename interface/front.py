@@ -1,11 +1,16 @@
 import sys
+import os
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QTextEdit, QComboBox, QPushButton, QProgressBar, QLabel, QSplitter
 )
 from PyQt5.QtCore import Qt
-from Simulador import MachineSimulator
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from Simulador.Simulador import MachineSimulator
 from maquinas.AP.AutomatoDeDuasPilha import AutomatoDeDuasPilha
+from maquinas.MR.MaquinaRegistradores import MaquinaRegistradores
+
+
 
 class SimuladorUI(QMainWindow):
     interacoes = 0
@@ -107,17 +112,22 @@ class SimuladorUI(QMainWindow):
     def iniciarMaquina(self):
         simulator = MachineSimulator()
         tipoMaquina = self.maquina_combo.currentText()
+        Json = self.programacao_area.toPlainText()
+        Entrada = self.entrada_field.toPlainText()
+
         if tipoMaquina == "Autômato de duas pilhas" :
-            AP = AutomatoDeDuasPilha("Automato de 2 pilhas")
-            simulator.add_machine(AP)
-            simulator.run_simulation()
+            AP = AutomatoDeDuasPilha("Autômato de duas pilhas")
+            simulator.execute_machine(AP, Json, Entrada)
             return AP.saida
         if tipoMaquina == "Máquina de Turing":
             pass
         if tipoMaquina == "Autômato de fila" :
             pass
         if tipoMaquina == "Máquina de registradores":
-            pass
+            MR = MaquinaRegistradores("Máquina de registradores")
+            simulator.execute_machine(MR, Json, Entrada)
+            MR.saida.pop(len(MR.saida) -1)
+            return MR.saida
 
     def increment_progress(self):
         if self.progress_value == 0 :
@@ -126,13 +136,21 @@ class SimuladorUI(QMainWindow):
         """Incrementa o progresso ao clicar no botão Play."""
         if self.progress_value < 100:
             self.interacoes += 1
-            self.progress_value = int((self.interacoes/len(self.saida))*100) # Incrementa o progresso em 10%
+            self.progress_value = int((self.interacoes/len(self.saida))*100)
             self.progress_bar.setValue(self.progress_value )
-            self.simulacao_area.append(self.formatar_json(self.saida[self.interacoes-1]))
+
+            if self.maquina_combo.currentText() == "Autômato de duas pilhas" :
+                self.simulacao_area.append(self.formatar_json(self.saida[self.interacoes-1]))
+            elif self.maquina_combo.currentText() == "Máquina de Turing":
+                pass
+            elif self.maquina_combo.currentText() == "Autômato de fila" :
+                pass
+            elif self.maquina_combo.currentText() == "Máquina de registradores":
+                self.simulacao_area.append(self.saida[self.interacoes-1])
             
 
     def formatar_json(self, json_data):
-        estado_atual = json_data
+        estado_atual = json_data["estado_atual"]
         buffer_entrada = json_data["buffer_entrada"] 
         pilha1 = json_data["pilhas"]["pilha1"] 
         pilha2 = json_data["pilhas"]["pilha2"] 
@@ -151,6 +169,7 @@ class SimuladorUI(QMainWindow):
 
     def reset_progress(self):
         """Reseta o progresso da barra."""
+        self.simulacao_area.clear()
         self.progress_value = 0
         self.progress_bar.setValue(0)
 
