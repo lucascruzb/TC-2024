@@ -1,4 +1,4 @@
-from maquinas.machine import Machine
+from maquinas.generic.machine import Machine
 
 # Simulator class to handle multiple machines
 class MachineSimulator:

@@ -1,5 +1,4 @@
-from maquinas.machine import Machine
-import copy
+from maquinas.generic.machine import Machine
 import json
 import re
 
@@ -119,6 +118,7 @@ class Estados:
         return transicoes
 
 class Registradores:
+
     def __init__(self, registradores_str):
         # Quebra a string de registradores em um formato "A=3, B=2, C=0"
         registradores_list = registradores_str.split(",")

@@ -1,5 +1,5 @@
 import json
-from maquinas.machine import Machine
+from maquinas.generic.machine import Machine
 import copy
 
 # ===========================================
@@ -22,7 +22,17 @@ class AutomatoDeDuasPilha(Machine) :
             input_buffer = list(entrada)  # Buffer de entrada como lista de caracteres
 
             while True:
-                self.salvar_transicao(current_state,input_buffer , stack1, stack2)
+
+                symbol = input_buffer[0] if input_buffer else "<vazio>"
+            
+                if symbol not in transitions[current_state]:
+                    print("\nA cadeia foi rejeitada: transição não encontrada.")
+                    break
+
+                transition = transitions[current_state][symbol]
+                next_state = transition['next_state']
+
+                self.salvar_transicao(current_state, next_state ,input_buffer , stack1, stack2)
 
                 if current_state in final_states:
                     print("\nA cadeia foi aceita!")
@@ -88,18 +98,10 @@ class AutomatoDeDuasPilha(Machine) :
 
         self.automaton_compute(Entrada,states, stack_symbols, initial_state, final_states, transitions)
 
-    def read_json(self,filename):
-        with open(filename, 'r') as f:
-            if not filename.lower().endswith('.json'):
-                print('O arquivo inserido precisa ser do formato JSON.')
-                raise SystemExit()
-            else:
-                data = json.load(f)
-        return data
-
-    def salvar_transicao(self,current_state,input_buffer ,stack1, stack2):
+    def salvar_transicao(self,current_state, next_stage,input_buffer ,stack1, stack2):
         estado_json = {
             "estado_atual": current_state,
+            "proximo_estado": next_stage,
             "buffer_entrada": input_buffer ,
             "pilhas": {
                 "pilha1": stack1 ,

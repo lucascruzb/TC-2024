@@ -9,6 +9,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from Simulador.Simulador import MachineSimulator
 from maquinas.AP.AutomatoDeDuasPilha import AutomatoDeDuasPilha
 from maquinas.MR.MaquinaRegistradores import MaquinaRegistradores
+from maquinas.AF.AutomatoDeFila import AutomatoDeFila
 
 
 
@@ -57,8 +58,14 @@ class SimuladorUI(QMainWindow):
         self.maquina_combo = QComboBox()
         self.maquina_combo.setPlaceholderText("Selecionar máquina")
         self.maquina_combo.addItems(["Máquina de Turing","Autômato de duas pilhas","Autômato de fila","Máquina de registradores"])
+
+
         self.carregar_button = QPushButton("Carregar Programação")
+        self.carregar_button.clicked.connect(self.abrir_json)
+
         self.salvar_button = QPushButton("💾")
+
+
         bottom_layout.addWidget(self.maquina_combo)
         bottom_layout.addWidget(self.carregar_button)
         bottom_layout.addWidget(self.salvar_button)
@@ -122,7 +129,9 @@ class SimuladorUI(QMainWindow):
         if tipoMaquina == "Máquina de Turing":
             pass
         if tipoMaquina == "Autômato de fila" :
-            pass
+            AF = AutomatoDeFila("Autômato de fila")
+            simulator.execute_machine(AF, Json, Entrada)
+            return AF.saida
         if tipoMaquina == "Máquina de registradores":
             MR = MaquinaRegistradores("Máquina de registradores")
             simulator.execute_machine(MR, Json, Entrada)
@@ -144,19 +153,36 @@ class SimuladorUI(QMainWindow):
             elif self.maquina_combo.currentText() == "Máquina de Turing":
                 pass
             elif self.maquina_combo.currentText() == "Autômato de fila" :
-                pass
+                self.simulacao_area.append(self.saida[self.interacoes-1])
             elif self.maquina_combo.currentText() == "Máquina de registradores":
                 self.simulacao_area.append(self.saida[self.interacoes-1])
             
+    def abrir_json(self):
+        # Abrir uma janela para selecionar o arquivo JSON
+        options = QFileDialog.Options()
+        caminho, _ = QFileDialog.getOpenFileName(self, "Selecione o arquivo JSON", "", "Arquivos JSON (*.json);;Todos os Arquivos (*)", options=options)
+        
+        if caminho:
+            try:
+                # Ler o conteúdo do arquivo JSON
+                with open(caminho, 'r', encoding='utf-8') as arquivo:
+                    dados = json.load(arquivo)
+                
+                # Exibir o conteúdo do JSON na área de texto
+                self.text_area.setText(json.dumps(dados, indent=4, ensure_ascii=False))
+            except json.JSONDecodeError:
+                self.text_area.setText("Erro: O arquivo selecionado não é um JSON válido.")
 
     def formatar_json(self, json_data):
         estado_atual = json_data["estado_atual"]
+        proximo_estado = json_data["proximo_estado"]
         buffer_entrada = json_data["buffer_entrada"] 
         pilha1 = json_data["pilhas"]["pilha1"] 
         pilha2 = json_data["pilhas"]["pilha2"] 
 
         texto_formatado = (
         f"Estado Atual: {estado_atual}\n"
+        f"Proximo Estado: {proximo_estado}\n"
         f"Buffer de Entrada: {buffer_entrada}\n\n"
         "Pilhas Atuais:\n"
         f"Pilha 1: {pilha1}\n"
@@ -166,10 +192,10 @@ class SimuladorUI(QMainWindow):
 
         return texto_formatado
     
-
     def reset_progress(self):
         """Reseta o progresso da barra."""
         self.simulacao_area.clear()
+        self.saida.clear()
         self.progress_value = 0
         self.progress_bar.setValue(0)
 
