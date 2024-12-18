@@ -1,0 +1,41 @@
+{
+    "machine_type": "turing",
+    "words_log": [
+        {
+            "word": "a",
+            "steps": [
+                {
+                    "step": 0,
+                    "state": "q0",
+                    "tape": "a",
+                    "head_position": 0
+                },
+                {
+                    "step": 1,
+                    "state": "q1",
+                    "tape": "X",
+                    "head_position": 1
+                },
+                {
+                    "step": 2,
+                    "state": "q_reject",
+                    "tape": "X_",
+                    "head_position": 2
+                }
+            ],
+            "result": "rejected"
+        },
+        {
+            "word": "b",
+            "steps": [
+                {
+                    "step": 0,
+                    "state": "q_reject",
+                    "tape": "b",
+                    "head_position": 0
+                }
+            ],
+            "result": "rejected"
+        }
+    ]
+}

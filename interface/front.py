@@ -11,6 +11,7 @@ from Simulador.Simulador import MachineSimulator
 from maquinas.AP.AutomatoDeDuasPilha import AutomatoDeDuasPilha
 from maquinas.MR.MaquinaRegistradores import MaquinaRegistradores
 from maquinas.AF.AutomatoDeFila import AutomatoDeFila
+from maquinas.MT.maquinaTuring import TuringMachine
 
 
 
@@ -128,7 +129,9 @@ class SimuladorUI(QMainWindow):
             simulator.execute_machine(AP, Json, Entrada)
             return AP.saida
         if tipoMaquina == "Máquina de Turing":
-            pass
+            TM = TuringMachine("Máquina de Turing")
+            simulator.execute_machine(TM, Json, Entrada)
+            return TM.saida["words_log"][0]["steps"]
         if tipoMaquina == "Autômato de fila" :
             AF = AutomatoDeFila("Autômato de fila")
             simulator.execute_machine(AF, Json, Entrada)
@@ -152,7 +155,7 @@ class SimuladorUI(QMainWindow):
             if self.maquina_combo.currentText() == "Autômato de duas pilhas" :
                 self.simulacao_area.append(self.formatar_json(self.saida[self.interacoes-1]))
             elif self.maquina_combo.currentText() == "Máquina de Turing":
-                pass
+                self.simulacao_area.append(json.dumps(self.saida[self.interacoes-1]))
             elif self.maquina_combo.currentText() == "Autômato de fila" :
                 self.simulacao_area.append(self.saida[self.interacoes-1])
             elif self.maquina_combo.currentText() == "Máquina de registradores":
