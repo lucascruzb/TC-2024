@@ -114,6 +114,7 @@ class SimuladorUI(QMainWindow):
         self.next_button.clicked.connect
         self.play_button.clicked.connect(self.increment_progress)
         self.stop_button.clicked.connect(self.reset_progress)
+        self.salvar_button.clicked.connect(self.salvar_maquina)
 
     def setarMaquina(self, nomeMaquina):
         self.maquina_combo.setCurrentText(nomeMaquina)
@@ -161,6 +162,11 @@ class SimuladorUI(QMainWindow):
             elif self.maquina_combo.currentText() == "Máquina de registradores":
                 self.simulacao_area.append(self.saida[self.interacoes-1])
             
+    def salvar_maquina(self):
+        output_log = self.programacao_area.toPlainText()
+        with open("resources/config.json", "w", encoding="utf-8") as f:
+            json.dump(output_log, f, indent=4, ensure_ascii=False)
+
     def abrir_json(self):
         # Abrir uma janela para selecionar o arquivo JSON
         options = QFileDialog.Options()
