@@ -1,0 +1,21 @@
+{
+  "machine_type": "turing",
+  "blank_symbol": "_",
+  "initial_state": "q0",
+  "final_states": ["q_accept"],
+  "reject_states": ["q_reject"],
+  "transition_function": {
+    "(q0,a)": ["q1", "X", "R"],
+    "(q0,b)": ["q_accept", "b", "R"],
+    "(q0,_)": ["q_accept", "_", "R"],
+    "(q1,b)": ["q2", "Y", "L"],
+    "(q1,a)": ["q1", "a", "R"],
+    "(q1,_)": ["q_reject", "_", "R"],
+    "(q1,Y)": ["q1", "Y", "R"],
+    "(q2,a)": ["q2", "a", "L"],
+    "(q2,Y)": ["q2", "Y", "L"],
+    "(q2,X)": ["q0", "X", "R"],
+    "(q2,_)": ["q2", "_", "L"]
+  },
+  "words": ["aaabbb", "aabb", "aaaabbbb"]
+}

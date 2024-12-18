@@ -1,7 +1,8 @@
 import sys
 import os
+import json
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
+    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,QFileDialog,
     QTextEdit, QComboBox, QPushButton, QProgressBar, QLabel, QSplitter
 )
 from PyQt5.QtCore import Qt
@@ -169,9 +170,9 @@ class SimuladorUI(QMainWindow):
                     dados = json.load(arquivo)
                 
                 # Exibir o conteúdo do JSON na área de texto
-                self.text_area.setText(json.dumps(dados, indent=4, ensure_ascii=False))
+                self.programacao_area.setText(json.dumps(dados, indent=4, ensure_ascii=False))
             except json.JSONDecodeError:
-                self.text_area.setText("Erro: O arquivo selecionado não é um JSON válido.")
+                self.programacao_area.setText("Erro: O arquivo selecionado não é um JSON válido.")
 
     def formatar_json(self, json_data):
         estado_atual = json_data["estado_atual"]
