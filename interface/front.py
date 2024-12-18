@@ -111,7 +111,7 @@ class SimuladorUI(QMainWindow):
         self.maquina_combo.currentTextChanged.connect(self.setarMaquina)
 
         # Conectar botões
-        self.next_button.clicked.connect
+        self.next_button.clicked.connect(self.processar_entradas)
         self.play_button.clicked.connect(self.increment_progress)
         self.stop_button.clicked.connect(self.reset_progress)
         self.salvar_button.clicked.connect(self.salvar_maquina)
@@ -161,7 +161,36 @@ class SimuladorUI(QMainWindow):
                 self.simulacao_area.append(self.saida[self.interacoes-1])
             elif self.maquina_combo.currentText() == "Máquina de registradores":
                 self.simulacao_area.append(self.saida[self.interacoes-1])
-            
+    
+    def processar_entradas(self):
+        if self.progress_value == 0 :
+            self.saida = self.iniciarMaquina()
+            self.interacoes = 1
+            while self.interacoes < len(self.saida)+1 :
+                if self.maquina_combo.currentText() == "Autômato de duas pilhas" :
+                    self.simulacao_area.append(self.formatar_json(self.saida[self.interacoes-1]))
+                elif self.maquina_combo.currentText() == "Máquina de Turing":
+                    self.simulacao_area.append(json.dumps(self.saida[self.interacoes-1]))
+                elif self.maquina_combo.currentText() == "Autômato de fila" :
+                    self.simulacao_area.append(self.saida[self.interacoes-1])
+                elif self.maquina_combo.currentText() == "Máquina de registradores":
+                    self.simulacao_area.append(self.saida[self.interacoes-1])
+                self.interacoes += 1
+            self.progress_bar.setValue(100)
+        elif self.progress_value < 100:
+            self.interacoes += 1
+            while self.interacoes < len(self.saida)+1 :
+                if self.maquina_combo.currentText() == "Autômato de duas pilhas" :
+                    self.simulacao_area.append(self.formatar_json(self.saida[self.interacoes-1]))
+                elif self.maquina_combo.currentText() == "Máquina de Turing":
+                    self.simulacao_area.append(json.dumps(self.saida[self.interacoes-1]))
+                elif self.maquina_combo.currentText() == "Autômato de fila" :
+                    self.simulacao_area.append(self.saida[self.interacoes-1])
+                elif self.maquina_combo.currentText() == "Máquina de registradores":
+                    self.simulacao_area.append(self.saida[self.interacoes-1])
+                self.interacoes += 1
+            self.progress_bar.setValue(100)
+        
     def salvar_maquina(self):
         output_log = self.programacao_area.toPlainText()
         with open("resources/config.json", "w", encoding="utf-8") as f:
