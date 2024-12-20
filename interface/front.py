@@ -11,7 +11,7 @@ from Simulador.Simulador import MachineSimulator
 from maquinas.AP.AutomatoDeDuasPilha import AutomatoDeDuasPilha
 from maquinas.MR.MaquinaRegistradores import MaquinaRegistradores
 from maquinas.AF.AutomatoDeFila import AutomatoDeFila
-from maquinas.MT.maquinaTuring import TuringMachine
+from maquinas.MT.MaquinaTuring import TuringMachine
 
 
 
