@@ -3,6 +3,7 @@ import sys
 from collections import deque
 from maquinas.generic.machine import Machine
 
+
 class AutomatoDeFila(Machine):
     saida = []
 
@@ -22,9 +23,9 @@ class AutomatoDeFila(Machine):
         # Processar a entrada no autômato
         result, transitions = self.process_input_with_matrix(automaton_definition, entrada)
 
-        # Registrar transições realizadas
+        # Registrar o estado atual e a palavra restante
         for transition in transitions:
-            self.saida.append(f"δ({transition['current_state']}, {transition['input_symbol']}, {transition['output_symbol']}, {transition['final_fila']}) → {transition['next_state']}")
+            self.saida.append(f"Estado: {transition['current_state']}, Fita: {transition['current_word']}")
 
     def validate_automaton(self, automaton):
         # Valida se o autômato possui estados de aceitação ou rejeição
@@ -89,65 +90,57 @@ class AutomatoDeFila(Machine):
         return matrix, state_to_index, symbol_to_index
 
     def process_input_with_matrix(self, automaton, input_string):
-        # Processa a entrada usando a matriz de transições
         current_state = automaton['start_state']
         current_state_index = self.state_to_index[current_state]
         queue = deque(input_string)
         transitions_log = []  # Armazena as transições realizadas
 
-        print("\n=== Execução da Máquina ===")
-        print(f"{'Palavra Atual':<20} {'Estado Atual':<15} {'Símbolo Consumido':<20} {'Próximo Estado':<15}")
-        print("=" * 70)
+        # Adicionar o estado inicial com a palavra inteira
+        transitions_log.append({
+            "current_state": current_state,
+            "current_word": ''.join(queue)  # Palavra inicial completa
+        })
 
         while queue:
             current_symbol = queue.popleft()  # Consome o símbolo da fila
 
-            # Verificar se o símbolo pertence ao alfabeto
             if current_symbol not in self.symbol_to_index:
                 raise ValueError(f"Símbolo inválido: {current_symbol}")
 
-            # Obter a transição da matriz
             col = self.symbol_to_index[current_symbol]
             transition = self.matrix[current_state_index][col]
 
             if transition is None:
-                print("Erro: Transição não definida para o estado atual e símbolo consumido.")
                 return "Palavra Não Reconhecida", transitions_log
 
             # Extrair os dados da transição
             output_symbol, final_fila, next_state = transition
             next_state_index = self.state_to_index[next_state]
 
-            # Registrar a transição
+            # Escrever na fita no mesmo estado antes de transitar
+            if output_symbol != current_symbol:
+                transitions_log.append({
+                    "current_state": current_state,
+                    "current_word": ''.join(queue) + output_symbol  # Atualiza a fita com o símbolo escrito
+                })
+
+            # Atualizar a transição e registrar a palavra restante
             transitions_log.append({
-                "current_state": current_state,
-                "input_symbol": current_symbol,
-                "output_symbol": output_symbol,
-                "next_state": next_state,
-                "final_fila": final_fila
+                "current_state": next_state,
+                "current_word": ''.join(queue)  # Palavra restante na fila
             })
 
-            # Exibir a transição no terminal
-            current_word = ''.join(queue)
-            print(f"{current_word:<20} {current_state:<15} {current_symbol:<20} {next_state:<15}")
-
-            # Atualizar o estado atual e adicionar ao final da fila, se necessário
             current_state = next_state
             current_state_index = next_state_index
-            if final_fila != "e":  # "e" indica que nada será adicionado
+
+            # Adicionar à fila o símbolo gerado pela transição
+            if final_fila != "e":
                 queue.append(final_fila)
 
-            # Verificar se o estado atual é de rejeição
+            # Verificar se o estado atual é de aceitação ou rejeição
+            if current_state in automaton['accept_states']:
+                return "Palavra Aceita", transitions_log
             if current_state in automaton['reject_states']:
-                print("=== Palavra Rejeitada: O autômato atingiu um estado de rejeição ===")
                 return "Palavra Rejeitada", transitions_log
 
-        print("=" * 70)
-
-        # Verificar se terminou em um estado de aceitação
-        if current_state in automaton['accept_states']:
-            print("=== Palavra Aceita ===")
-            return "Palavra Aceita", transitions_log
-        else:
-            print("=== Palavra Não Reconhecida ===")
-            return "Palavra Não Reconhecida", transitions_log
+        return "Palavra Não Reconhecida", transitions_log
